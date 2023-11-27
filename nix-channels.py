@@ -367,8 +367,6 @@ def garbage_collect():
 
     time_threshold = datetime.now() - timedelta(days=RETAIN_DAYS)
 
-    last_updated = {}
-    latest = {}
     alive = set()
 
     for release in (working_dir / RELEASES_DIR).iterdir():
@@ -381,13 +379,6 @@ def garbage_collect():
 
         if released_date >= time_threshold:
             alive.add(release)
-
-        if channel not in last_updated \
-            or last_updated[channel] < released_date:
-            last_updated[channel] = released_date
-            latest[channel] = release
-
-    alive.update(latest.values())
 
     logging.info(f'  - {len(alive)} releases alive')
 
